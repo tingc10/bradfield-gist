@@ -10,39 +10,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_25_221046) do
+ActiveRecord::Schema.define(version: 2018_10_28_204759) do
 
   create_table "files", force: :cascade do |t|
     t.string "name"
-    t.string "content"
     t.string "indent_mode"
     t.integer "indent_size"
     t.boolean "line_wrap"
-  end
-
-  create_table "files_in_gists", force: :cascade do |t|
-    t.integer "file_id"
-    t.integer "gist_id"
-    t.index ["file_id"], name: "index_files_in_gists_on_file_id"
-    t.index ["gist_id"], name: "index_files_in_gists_on_gist_id"
+    t.string "token"
+    t.integer "gist_token_id"
+    t.integer "current_revision_token_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["current_revision_token_id"], name: "index_files_on_current_revision_token_id"
+    t.index ["gist_token_id"], name: "index_files_on_gist_token_id"
   end
 
   create_table "gists", force: :cascade do |t|
     t.boolean "is_private"
     t.string "description"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "revisions", force: :cascade do |t|
+    t.string "token"
+    t.string "content"
+    t.integer "file_token_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["file_token_id"], name: "index_revisions_on_file_token_id"
   end
 
   create_table "user_saved_gists", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "gist_id"
+    t.integer "user_token_id"
+    t.integer "gist_token_id"
     t.string "relationship"
-    t.index ["gist_id"], name: "index_user_saved_gists_on_gist_id"
-    t.index ["user_id"], name: "index_user_saved_gists_on_user_id"
+    t.index ["gist_token_id"], name: "index_user_saved_gists_on_gist_token_id"
+    t.index ["user_token_id"], name: "index_user_saved_gists_on_user_token_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
+    t.string "user_name"
+    t.string "password"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
